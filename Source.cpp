@@ -9,8 +9,8 @@ using namespace std;
 struct Node
 {
 	string name;
-	vector<string> tweets; 
-	vector<int> likes; 
+	vector<string> tweets;
+	vector<int> likes;
 	vector<int> followers;
 	vector<int> dates; //mmddyy
 	string wing;
@@ -31,6 +31,23 @@ struct Node
 		wing = _wing;
 	}
 };
+
+int changeDateFormat(string fullDate)
+{
+	string strDate = "";
+
+	int findFirstSlash = fullDate.find("/");
+	int findSecondSlash = fullDate.find("/", findFirstSlash);
+	int findSpace = fullDate.find(" ");
+
+	if (findFirstSlash != -1 && findSecondSlash != -1 && findSpace != -1)
+	{
+		strDate += fullDate.substr(0, findFirstSlash);
+		strDate += fullDate.substr(findFirstSlash, findSecondSlash) + fullDate.substr(findSecondSlash, findSpace);
+	}
+
+	return -1;
+}
 
 void GetData(string fileName, map<string, Node>& nodes)
 {
@@ -53,11 +70,11 @@ void GetData(string fileName, map<string, Node>& nodes)
 			getline(stream, tweet, ','); //tweet content
 			getline(stream, temp, ','); //region
 			getline(stream, temp, ','); //language
-			getline(stream, strdates, ','); //date created
+			getline(stream, strDates, ','); //date created
 			getline(stream, temp, ','); //harvested date
 			getline(stream, temp, ','); //following
-			getline(stream, strfollowers, ','); //followers
-			getline(stream, strlikes, ','); //updates
+			getline(stream, strFollowers, ','); //followers
+			getline(stream, strLikes, ','); //updates
 			getline(stream, temp, ','); //post type (blank if normal tweet)
 			getline(stream, wing, ','); //wing
 			getline(stream, temp, ','); //if its a retweet
@@ -70,23 +87,36 @@ void GetData(string fileName, map<string, Node>& nodes)
 			getline(stream, temp, ',');
 			getline(stream, temp);
 
-			//convert date to mmddyy int format
+			dates = changeDateFormat(strDates);
 			likes = stoi(strLikes);
 			followers = stoi(strFollowers);
 
 
 			if (nodes.count(name) > 0)
 			{
+				cout << name << " " << tweet << " " << strDates << " " << likes << " " << followers << endl;
 				nodes[name].tweets.push_back(tweet);
-				nodes[name].dates.push_back(dates);
 				nodes[name].likes.push_back(likes);
 				nodes[name].followers.push_back(followers);
 			}
 			else
 			{
-				Node node = new Node(name, tweet, likes, followers, dates, wing);
+				Node node(name, tweet, likes, followers, dates, wing);
 				nodes[name] = node;
 			}
 		}
 	}
+	else
+	{
+		cout << "File did not open!" << endl;
+	}
 }
+
+
+	int main()
+	{
+		map<string, Node> nodes;
+		string file = "russian-troll-tweets-master/IRAhandle_tweets_1.csv";
+
+		GetData(file, nodes);
+	}
