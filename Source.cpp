@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <stack>
 using namespace std;
 
 struct Node
@@ -37,22 +38,44 @@ int changeDateFormat(string fullDate)
 	string strDate = "";
 
 	int findFirstSlash = fullDate.find("/");
-	int findSecondSlash = fullDate.find("/", findFirstSlash);
+	int findSecondSlash = fullDate.find("/", findFirstSlash + 1);
 	int findSpace = fullDate.find(" ");
 
-	if (findFirstSlash != -1 && findSecondSlash != -1 && findSpace != -1)
+	if (findFirstSlash != -1 && findFirstSlash == 1)
+	{
+		strDate += "0" + fullDate.substr(0, findFirstSlash);
+	}
+	else if (findFirstSlash != -1 && findFirstSlash == 2)
 	{
 		strDate += fullDate.substr(0, findFirstSlash);
-		strDate += fullDate.substr(findFirstSlash, findSecondSlash) + fullDate.substr(findSecondSlash, findSpace);
+	}
+	else
+	{
+		return -1;
 	}
 
-	return -1;
+	if (findSecondSlash != -1 && findSecondSlash == findFirstSlash + 2)
+	{
+		strDate += "0" + fullDate.substr(findFirstSlash + 1, findSecondSlash - findFirstSlash - 1);
+	}
+	else if (findSecondSlash != -1 && findSecondSlash == findFirstSlash + 3)
+	{
+		strDate += fullDate.substr(findFirstSlash + 1, findSecondSlash - findFirstSlash - 1);
+	}
+	else
+	{
+		return -1;
+	}
+	
+	strDate += fullDate.substr(findSecondSlash + 1, findSpace - findSecondSlash - 1);
+
+	return stoi(strDate);
 }
 
 void GetData(string fileName, map<string, Node>& nodes)
 {
 	ifstream file(fileName);
-
+	int row = 2;
 	if (file.is_open())
 	{
 		string lineFromFile;
@@ -65,9 +88,43 @@ void GetData(string fileName, map<string, Node>& nodes)
 			string name, tweet, strLikes, strFollowers, strDates, wing, temp;
 			int likes, followers, dates;
 
+			/*
+			if (row == 412)
+			{
+				throw "STOP";
+			}
+			*/
+
 			getline(stream, temp, ','); //external_author_id
 			getline(stream, name, ','); //username
 			getline(stream, tweet, ','); //tweet content
+
+			if (tweet[0] == '"' && tweet.find_last_of("\"") != tweet.length() - 1)
+			{
+				int quotations = 1;
+				int index = 0;
+
+				while (quotations % 2 == 1)
+				{
+					getline(stream, temp, ',');
+					tweet += temp;
+
+					while (tweet.find("\"", index + 1) != string::npos)
+					{
+						index = tweet.find("\"", index + 1);
+						quotations++;
+					}
+				}
+
+				/*
+				while (tweet.find_last_of("\"") != tweet.length() - 1)
+				{
+					getline(stream, temp, ',');
+					tweet += temp;
+				}
+				*/
+			}
+
 			getline(stream, temp, ','); //region
 			getline(stream, temp, ','); //language
 			getline(stream, strDates, ','); //date created
@@ -87,23 +144,31 @@ void GetData(string fileName, map<string, Node>& nodes)
 			getline(stream, temp, ',');
 			getline(stream, temp);
 
+			followers = stoi(strFollowers);
 			dates = changeDateFormat(strDates);
 			likes = stoi(strLikes);
-			followers = stoi(strFollowers);
-
+			
+			if (dates == -1)
+			{
+				throw "Date exception!";
+			}
+			
 
 			if (nodes.count(name) > 0)
 			{
-				cout << name << " " << tweet << " " << strDates << " " << likes << " " << followers << endl;
 				nodes[name].tweets.push_back(tweet);
 				nodes[name].likes.push_back(likes);
 				nodes[name].followers.push_back(followers);
+				nodes[name].dates.push_back(dates);
 			}
 			else
 			{
 				Node node(name, tweet, likes, followers, dates, wing);
 				nodes[name] = node;
 			}
+
+			cout << row << " " << name << " " << tweet << " " << dates << " " << likes << " " << followers << endl;
+			row++;
 		}
 	}
 	else
