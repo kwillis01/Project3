@@ -13,7 +13,7 @@ struct Node
 	vector<string> tweets;
 	vector<int> likes;
 	vector<int> followers;
-	vector<int> dates; //mmddyy
+	vector<string> dates; //mmddyy
 	string wing;
 
 	Node()
@@ -22,7 +22,7 @@ struct Node
 		wing = "";
 	}
 
-	Node(string _name, string _tweet, int _likes, int _followers, int _dates, string _wing)
+	Node(string _name, string _tweet, int _likes, int _followers, string _dates, string _wing)
 	{
 		name = _name;
 		tweets.push_back(_tweet);
@@ -33,14 +33,17 @@ struct Node
 	}
 };
 
-int changeDateFormat(string fullDate)
+//changes the date into mmddyy format
+string changeDateFormat(string fullDate)
 {
 	string strDate = "";
 
+	//find the slashes that separates the month day and year as well as the space that separates the date from the time
 	int findFirstSlash = fullDate.find("/");
 	int findSecondSlash = fullDate.find("/", findFirstSlash + 1);
 	int findSpace = fullDate.find(" ");
 
+	//gets the month
 	if (findFirstSlash != -1 && findFirstSlash == 1)
 	{
 		strDate += "0" + fullDate.substr(0, findFirstSlash);
@@ -51,9 +54,10 @@ int changeDateFormat(string fullDate)
 	}
 	else
 	{
-		return -1;
+		return "-1";
 	}
 
+	//gets the day
 	if (findSecondSlash != -1 && findSecondSlash == findFirstSlash + 2)
 	{
 		strDate += "0" + fullDate.substr(findFirstSlash + 1, findSecondSlash - findFirstSlash - 1);
@@ -64,20 +68,23 @@ int changeDateFormat(string fullDate)
 	}
 	else
 	{
-		return -1;
+		return "-1";
 	}
 	
+	//gets the year
 	strDate += fullDate.substr(findSecondSlash + 1, findSpace - findSecondSlash - 1);
 
-	return stoi(strDate);
+	return strDate;
 }
 
+//parses through all the data to make the tree
 void GetData(string fileName, map<string, Node>& nodes)
 {
 	ifstream file(fileName);
-	int row = 2;
+	//int row = 2; //for debugging purposes
 	if (file.is_open())
 	{
+		//gets the header
 		string lineFromFile;
 		getline(file, lineFromFile);
 
@@ -85,49 +92,44 @@ void GetData(string fileName, map<string, Node>& nodes)
 		{
 			istringstream stream(lineFromFile);
 
-			string name, tweet, strLikes, strFollowers, strDates, wing, temp;
-			int likes, followers, dates;
+			//all the variables needed to parse through the data
+			//the temp is used for any data we do not need, but is included in the csv
+			string name, tweet, strLikes, strFollowers, dates, wing, temp;
+			int likes, followers;
 
-			/*
-			if (row == 412)
-			{
-				throw "STOP";
-			}
-			*/
-
+			// STARTS PARSING
 			getline(stream, temp, ','); //external_author_id
 			getline(stream, name, ','); //username
 			getline(stream, tweet, ','); //tweet content
 
-			if (tweet[0] == '"' && tweet.find_last_of("\"") != tweet.length() - 1)
+			//if there is a comma in the tweet, make sure that the whole tweet is recieved
+			if (tweet[0] == '"')
 			{
 				int quotations = 1;
 				int index = 0;
-
+				
+				//checks the quotations to make sure they are even meaning there is opening and closing quotations
 				while (quotations % 2 == 1)
 				{
-					getline(stream, temp, ',');
-					tweet += temp;
-
+					//finds all the quotations
 					while (tweet.find("\"", index + 1) != string::npos)
 					{
 						index = tweet.find("\"", index + 1);
 						quotations++;
 					}
-				}
 
-				/*
-				while (tweet.find_last_of("\"") != tweet.length() - 1)
-				{
+					if (quotations % 2 == 0)
+						break;
+
+					//gets the nexet part of the tweet
 					getline(stream, temp, ',');
 					tweet += temp;
 				}
-				*/
 			}
 
 			getline(stream, temp, ','); //region
 			getline(stream, temp, ','); //language
-			getline(stream, strDates, ','); //date created
+			getline(stream, dates, ','); //date created
 			getline(stream, temp, ','); //harvested date
 			getline(stream, temp, ','); //following
 			getline(stream, strFollowers, ','); //followers
@@ -143,17 +145,19 @@ void GetData(string fileName, map<string, Node>& nodes)
 			getline(stream, temp, ',');
 			getline(stream, temp, ',');
 			getline(stream, temp);
-
+			
+			//change string variables to int ones
 			followers = stoi(strFollowers);
-			dates = changeDateFormat(strDates);
+			dates = changeDateFormat(dates);
 			likes = stoi(strLikes);
 			
-			if (dates == -1)
+			//throws an exception if the date is not parsed in correctly
+			if (dates == "-1")
 			{
 				throw "Date exception!";
 			}
 			
-
+			//makes a new node or adds to new information to the node
 			if (nodes.count(name) > 0)
 			{
 				nodes[name].tweets.push_back(tweet);
@@ -167,8 +171,9 @@ void GetData(string fileName, map<string, Node>& nodes)
 				nodes[name] = node;
 			}
 
-			cout << row << " " << name << " " << tweet << " " << dates << " " << likes << " " << followers << endl;
-			row++;
+			//commented out part is for debugging
+			//cout << row << " " << name << " " << tweet << " " << dates << " " << likes << " " << followers << endl;
+			//row++;
 		}
 	}
 	else
