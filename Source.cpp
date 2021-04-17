@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <queue>
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -15,6 +16,8 @@ struct Node
 	vector<int> followers;
 	vector<string> dates; //mmddyy
 	string wing;
+	Node* right;
+	Node* left;
 
 	Node()
 	{
@@ -78,10 +81,12 @@ string changeDateFormat(string fullDate)
 }
 
 //parses through all the data to make the tree
-void GetData(string fileName, map<string, Node>& nodes)
+void GetData(string fileName, vector<Node*>& nodes)
 {
 	ifstream file(fileName);
 	//int row = 2; //for debugging purposes
+	int index = 0;
+
 	if (file.is_open())
 	{
 		//gets the header
@@ -158,23 +163,27 @@ void GetData(string fileName, map<string, Node>& nodes)
 			}
 			
 			//makes a new node or adds to new information to the node
-			if (nodes.count(name) > 0)
+			if (!nodes.empty() && nodes.at(index)->name == name)
 			{
-				nodes[name].tweets.push_back(tweet);
-				nodes[name].likes.push_back(likes);
-				nodes[name].followers.push_back(followers);
-				nodes[name].dates.push_back(dates);
+				nodes.at(index)->tweets.push_back(tweet);
+				nodes.at(index)->likes.push_back(likes);
+				nodes.at(index)->followers.push_back(followers);
+				nodes.at(index)->dates.push_back(dates);
 			}
 			else
 			{
-				Node node(name, tweet, likes, followers, dates, wing);
-				nodes[name] = node;
+				if (!nodes.empty())
+					index++;
+				
+				Node* node = new Node(name, tweet, likes, followers, dates, wing);
+				nodes.push_back(node);
 			}
 
 			//commented out part is for debugging
 			//cout << row << " " << name << " " << tweet << " " << dates << " " << likes << " " << followers << endl;
 			//row++;
 		}
+		//cout << nodes.size();
 	}
 	else
 	{
@@ -182,11 +191,77 @@ void GetData(string fileName, map<string, Node>& nodes)
 	}
 }
 
+Node* BinaryInsert(vector<Node*>& nodes, int startIndex, int endIndex)
+{
+	int mid = (endIndex + startIndex) / 2;
 
-	int main()
+	if (startIndex > endIndex)
 	{
-		map<string, Node> nodes;
-		string file = "russian-troll-tweets-master/IRAhandle_tweets_1.csv";
-
-		GetData(file, nodes);
+		return nullptr;
 	}
+
+	Node* root = nodes.at(mid);
+	root->left = BinaryInsert(nodes, startIndex, mid - 1);
+	root->right = BinaryInsert(nodes, mid + 1, endIndex);
+	return root;
+}
+
+void WingBFS(vector<Node*>& wings, Node* root, string specifiedWing)
+{
+	queue<Node*> q;
+
+	if (root != nullptr)
+	{
+		q.push(root);
+	}
+
+	while (!q.empty())
+	{
+		if (q.front()->wing == specifiedWing)
+			wings.push_back(q.front());
+
+		if (q.front()->left)
+			q.push(q.front()->left);
+
+		if (q.front()->right)
+			q.push(q.front()->right);
+
+		q.pop();
+	}
+}
+
+void WingDFS(vector<Node*>& wings, Node* root, string specifiedWing)
+{
+	if (root != nullptr)
+	{
+		if (root->wing == specifiedWing)
+			wings.push_back(root);
+		
+		WingBFS(wings, root->left, specifiedWing);
+		WingBFS(wings, root->right, specifiedWing);
+	}
+	
+}
+
+int main()
+{
+	vector<Node*> nodes;
+	string file = "russian-troll-tweets-master/IRAhandle_tweets_2.csv";
+
+	GetData(file, nodes);
+	Node* root = BinaryInsert(nodes, 0, nodes.size() - 1);
+	
+	vector<Node*> specifiedWing1;
+	vector<Node*> specifiedWing2;
+	
+	WingBFS(specifiedWing1, root, "Left");
+	WingDFS(specifiedWing2, root, "Left");
+
+	if (specifiedWing1.size() == specifiedWing2.size())
+	{
+		cout << "true" << endl;
+	}
+	else
+		cout << "false" << endl;
+	
+}
