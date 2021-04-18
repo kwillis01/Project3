@@ -110,8 +110,8 @@ bool isSubstring(string str, string substr){
 //prints the data contained in the top 20 nodes
 void printTweets(vector<string> &names, vector<string> &tweets, vector<string> &wing, vector<int> &likes, vector<int> &followers)
 {
-    if(names.size() > 20){
-        for(int i= 0; i < 20; i++){
+    if(names.size() > 5){
+        for(int i= 0; i < 5; i++){
             cout << "Author: @" << names[i] << endl;
             cout << "Tweet: ' " << tweets[i] << " '"<< endl;
             cout << "Number of Likes: " << likes[i] << endl;
@@ -130,8 +130,8 @@ void printTweets(vector<string> &names, vector<string> &tweets, vector<string> &
     }
 }
 void printTweets(vector<Node*> &nodes){
-    if(nodes.size() > 20){
-        for(int i= 0; i < 20; i++){
+    if(nodes.size() > 5){
+        for(int i= 0; i < 5; i++){
             cout << "Author: @" << nodes[i]->name << endl;
             cout << "Tweet: ' " << nodes[i]->tweets[0] << " '"<< endl;
             cout << "Number of Likes: " << nodes[i]->likes[0] << endl;
@@ -456,14 +456,19 @@ int main()
                 cout << "Enter the phrase you want to search for:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
-                //perform DFS search
+
+                //perform DFS search and time it
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
+
                 auto start = high_resolution_clock::now();
                 DepthFirstPhrase(search, root, tweets, names, wing, likes, followers);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
-                //Print out top 20 search results
+
+                //Print out top 5 search results
+                cout << tweets.size() <<" number of tweets were found!"<< endl;
+                cout << "Here are the top 5:" << endl << endl;
                 printTweets(names, tweets, wing, likes, followers);
                 cout << "Time taken for DFS by phrase: " << duration.count() << " nanoseconds" << endl;
             }
@@ -472,14 +477,18 @@ int main()
                 cout << "Enter the phrase you want to search for:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
-                //perform BFS search
+
+                //perform BFS search and time it
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
                 auto start = high_resolution_clock::now();
                 BreadthFirstPhrase(search, root, tweets, names, wing, likes, followers);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
-                //Print out top 20 search results
+
+                //Print out top 5 search results
+                cout << tweets.size() <<" number of tweets were found!"<< endl;
+                cout << "Here are the top 5:" << endl << endl;
                 printTweets(names, tweets, wing, likes, followers);
                 cout << "Time taken for BFS by phrase: " << duration.count() << " nanoseconds" << endl;
             }
@@ -495,14 +504,18 @@ int main()
                 cout << "Enter the date you want to search by in mmddyyyy format:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
-                //Perform DFS search
+
+                //Perform DFS search and time it
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
                 auto start = high_resolution_clock::now();
                 DepthFirstDate(search, root, names, tweets, wing, likes, followers);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
-                //Print out top 20 search results
+
+                //Print out top 5 search results
+                cout << tweets.size() <<" number of tweets were found!"<< endl;
+                cout << "Here are the top 5:" << endl << endl;
                 printTweets(names, tweets, wing, likes, followers);
                 cout << "Time taken for DFS by date: " << duration.count() << " nanoseconds" << endl;
             }
@@ -511,14 +524,18 @@ int main()
                 cout << "Enter the date you want to search by in mmddyyyy format:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
-                //Perform BFS search
+
+                //Perform BFS search and time it
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
                 auto start = high_resolution_clock::now();
                 BreadthFirstDate(search, root, names, tweets, wing, likes, followers);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
-                //Print out top 20 search results
+
+                //Print out top 5 search results
+                cout << tweets.size() <<" number of tweets were found!"<< endl;
+                cout << "Here are the top 5:" << endl << endl;
                 printTweets(names, tweets, wing, likes, followers);
                 cout << "Time taken for BFS by date: " << duration.count() << " nanoseconds" << endl;
             }
@@ -534,13 +551,17 @@ int main()
                 cout << "Enter the wing you want to search by:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<< endl << endl;
-                //Perform DFS search
+
+                //Perform DFS searchand time it
                 vector<Node*> specifiedWings;
                 auto start = high_resolution_clock::now();
                 WingDFS(specifiedWings, root, search);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
-                //Print out top 20 search results
+
+                //Print out top 5 search results
+                cout << specifiedWings.size() <<" number of tweets were found!"<< endl;
+                cout << "Here are the top 5:" << endl << endl;
                 printTweets(specifiedWings);
                 cout << "Time taken for DFS by wing: " << duration.count() << " nanoseconds" << endl;
             }
@@ -549,13 +570,17 @@ int main()
                 cout << "Enter the wing you want to search by:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '" << endl <<endl;
-                //Perform BFS search
+
+                //Perform BFS search and time it
                 vector<Node*> specifiedWings;
                 auto start = high_resolution_clock::now();
                 WingBFS(specifiedWings, root, search);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
-                //Print out top 20 search results
+
+                //Print out top 5 search results
+                cout << specifiedWings.size() <<" number of tweets were found!"<< endl;
+                cout << "Here are the top 5:" << endl << endl;
                 printTweets(specifiedWings);
                 cout << "Time taken for BFS by wing: " << duration.count() << " nanoseconds" << endl;
             }
