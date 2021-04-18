@@ -131,18 +131,18 @@ void printTweets(vector<Node*> &nodes){
     if(nodes.size() > 20){
         for(int i= 0; i < 20; i++){
             cout << "Author: @" << nodes[i]->name << endl;
-            cout << "Tweet: ' " << nodes[i]->tweets[i] << " '"<< endl;
-            cout << "Number of Likes: " << nodes[i]->likes[i] << endl;
-            cout << "Followers: " << nodes[i]->followers[i] << endl;
+            cout << "Tweet: ' " << nodes[i]->tweets[0] << " '"<< endl;
+            cout << "Number of Likes: " << nodes[i]->likes[0] << endl;
+            cout << "Followers: " << nodes[i]->followers[0] << endl;
             cout << "Wing: " << nodes[i]->wing << endl << endl;
         }
     }
     else{
         for(int i = 0; i < nodes.size(); i++){
             cout << "Author: @" << nodes[i]->name << endl;
-            cout << "Tweet: ' " << nodes[i]->tweets[i] << " '"<< endl;
-            cout << "Number of Likes: " << nodes[i]->likes[i] << endl;
-            cout << "Followers: " << nodes[i]->followers[i] << endl;
+            cout << "Tweet: ' " << nodes[i]->tweets[0] << " '"<< endl;
+            cout << "Number of Likes: " << nodes[i]->likes[0] << endl;
+            cout << "Followers: " << nodes[i]->followers[0] << endl;
             cout << "Wing: " << nodes[i]->wing << endl << endl;
         }
     }
