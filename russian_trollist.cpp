@@ -8,6 +8,7 @@
 #include <stack>
 #include <chrono>
 using namespace std;
+using namespace std::chrono;
 
 //Node class
 struct Node
