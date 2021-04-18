@@ -422,7 +422,8 @@ int main()
         cout << "4. Exit" << endl;
 
         int input;
-        int search;
+        int choice;
+        string search;
         cin >> input;
         switch (input) {
 
@@ -431,13 +432,19 @@ int main()
             cout << "How would you like to search?" << endl;
             cout << "1. Depth Search" << endl;
             cout << "2. Breadth Search" << endl;
-            cin >> search;
+            cin >> choice;
 
-            if (search == 1){
-                cout << "You are doing DFS by phrase!" << endl << endl;
+            if (choice == 1){
+                cout << "You are doing DFS by phrase!" << endl;
+                cout << "Enter the phrase you want to search for:" << endl;
+                cin >> search;
+                cout << "You are searching for ' " << search << " '"<<endl << endl;
             }
             else{
-                cout << "You are doing BFS by phrase!" << endl << endl;
+                cout << "You are doing BFS by phrase!" << endl;
+                cout << "Enter the phrase you want to search for:" << endl;
+                cin >> search;
+                cout << "You are searching for ' " << search << " '"<<endl << endl;
             }
             break;
         //Search by Date
@@ -445,13 +452,19 @@ int main()
             cout << "How would you like to search?" << endl;
             cout << "1. Depth Search" << endl;
             cout << "2. Breadth Search" << endl;
-            cin >> search;
+            cin >> choice;
 
-            if (search == 1){
-                cout << "You are doing DFS by Date!" << endl << endl;
+            if (choice == 1){
+                cout << "You are doing DFS by Date!" << endl;
+                cout << "Enter the date you want to search by:" << endl;
+                cin >> search;
+                cout << "You are searching for ' " << search << " '"<<endl << endl;
             }
             else{
-                cout << "You are doing BFS by Date!" << endl << endl;
+                cout << "You are doing BFS by Date!" << endl;
+                cout << "Enter the date you want to search by:" << endl;
+                cin >> search;
+                cout << "You are searching for ' " << search << " '"<<endl << endl;
             }
             break;
         //Search by Wing
@@ -459,13 +472,19 @@ int main()
             cout << "How would you like to search?" << endl;
             cout << "1. Depth Search" << endl;
             cout << "2. Breadth Search" << endl;
-            cin >> search;
+            cin >> choice;
 
-            if (search == 1){
-                cout << "You are doing DFS by Wing!" << endl << endl;
+            if (choice == 1){
+                cout << "You are doing DFS by Wing!" << endl;
+                cout << "Enter the wing you want to search by:" << endl;
+                cin >> search;
+                cout << "You are searching for ' " << search << " '"<< endl << endl;
             }
             else{
-                cout << "You are doing BFS by Wing!" << endl << endl;
+                cout << "You are doing BFS by Wing!" << endl;
+                cout << "Enter the wing you want to search by:" << endl;
+                cin >> search;
+                cout << "You are searching for ' " << search << " '" << endl <<endl;
             }
             break;
         case 4:
