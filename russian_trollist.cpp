@@ -6,6 +6,7 @@
 #include <sstream>
 #include <fstream>
 #include <stack>
+#include <chrono>
 using namespace std;
 
 //Node class
@@ -539,7 +540,6 @@ int main()
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
                 //Print out top 20 search results
-                cout << specifiedWings.size() << endl;
                 printTweets(specifiedWings);
                 cout << "Time taken for DFS by wing: " << duration.count() << " nanoseconds" << endl;
             }
@@ -555,7 +555,6 @@ int main()
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
                 //Print out top 20 search results
-                cout << specifiedWings.size() << endl;
                 printTweets(specifiedWings);
                 cout << "Time taken for BFS by wing: " << duration.count() << " nanoseconds" << endl;
             }
