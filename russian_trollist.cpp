@@ -15,7 +15,7 @@ struct Node
     vector<string> tweets;
     vector<int> likes;
     vector<int> followers;
-    vector<string> dates; //mmddyy
+    vector<string> dates; //mmddyyyy
     string wing;
     Node* left; 
     Node* right;
@@ -109,24 +109,41 @@ bool isSubstring(string str, string substr){
 void printTweets(vector<string> &names, vector<string> &tweets, vector<string> &wing, vector<int> &likes, vector<int> &followers)
 {
     if(names.size() > 20){
-        int i = 0;
-        while(i < 20){
+        for(int i= 0; i < 20; i++){
             cout << "Author: @" << names[i] << endl;
             cout << "Tweet: ' " << tweets[i] << " '"<< endl;
             cout << "Number of Likes: " << likes[i] << endl;
             cout << "Followers: " << followers[i] << endl;
-            cout << "Wing: " << wing[i] << endl;
-            i++;
+            cout << "Wing: " << wing[i] << endl << endl;
         }
     }
     else{
-        int i = 0;
-        while(i < 20){
+        for(int i = 0; i < names.size(); i++){
             cout << "Author: @" << names[i] << endl;
             cout << "Tweet: ' " << tweets[i] << " '"<< endl;
             cout << "Number of Likes: " << likes[i] << endl;
             cout << "Followers: " << followers[i] << endl;
-            cout << "Wing: " << wing[i] << endl;
+            cout << "Wing: " << wing[i] << endl << endl;
+        }
+    }
+}
+void printTweets(vector<Node*> &nodes){
+    if(nodes.size() > 20){
+        for(int i= 0; i < 20; i++){
+            cout << "Author: @" << nodes[i]->name << endl;
+            cout << "Tweet: ' " << nodes[i]->tweets[i] << " '"<< endl;
+            cout << "Number of Likes: " << nodes[i]->likes[i] << endl;
+            cout << "Followers: " << nodes[i]->followers[i] << endl;
+            cout << "Wing: " << nodes[i]->wing << endl << endl;
+        }
+    }
+    else{
+        for(int i = 0; i < nodes.size(); i++){
+            cout << "Author: @" << nodes[i]->name << endl;
+            cout << "Tweet: ' " << nodes[i]->tweets[i] << " '"<< endl;
+            cout << "Number of Likes: " << nodes[i]->likes[i] << endl;
+            cout << "Followers: " << nodes[i]->followers[i] << endl;
+            cout << "Wing: " << nodes[i]->wing << endl << endl;
         }
     }
 }
@@ -287,12 +304,13 @@ void BreadthFirstDate(string date, Node* root, vector<string> &names, vector<str
 {
     queue<Node *> q;
     Node *node;
+    int len;
     if (root == nullptr){
         return;
     }
     q.push(root);
     while (!q.empty()){
-        int len = q.size();
+        len = q.size();
         for (int i = 0; i < len; i++){
             node = q.front();
             if (node->left != nullptr){
@@ -303,7 +321,9 @@ void BreadthFirstDate(string date, Node* root, vector<string> &names, vector<str
             }
             q.pop();
             for (int i = 0; i < root->dates.size(); i++){
-                if (root->dates[i] == date){
+                //cout << "checkpoint" << endl;
+                if (node->dates[i] == date){
+                    
                     names.push_back(root->name);
                     tweets.push_back(root->tweets[i]);
                     wing.push_back(root->wing);
@@ -439,12 +459,28 @@ int main()
                 cout << "Enter the phrase you want to search for:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
+
+                //perform DFS search
+                vector<string> tweets, names, wing;
+                vector<int> likes, followers; 
+                DepthFirstPhrase(search, root, tweets, names, wing, likes, followers);
+
+                //Print out top 20 search results
+                printTweets(names, tweets, wing, likes, followers);
             }
             else{
                 cout << "You are doing BFS by phrase!" << endl;
                 cout << "Enter the phrase you want to search for:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
+
+                //perform BFS search
+                vector<string> tweets, names, wing;
+                vector<int> likes, followers; 
+                BreadthFirstPhrase(search, root, tweets, names, wing, likes, followers);
+
+                //Print out top 20 search results
+                printTweets(names, tweets, wing, likes, followers);
             }
             break;
         //Search by Date
@@ -456,15 +492,31 @@ int main()
 
             if (choice == 1){
                 cout << "You are doing DFS by Date!" << endl;
-                cout << "Enter the date you want to search by:" << endl;
+                cout << "Enter the date you want to search by in mmddyyyy format:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
+
+                //Perform DFS search
+                vector<string> tweets, names, wing;
+                vector<int> likes, followers; 
+                DepthFirstDate(search, root, names, tweets, wing, likes, followers);
+
+                //Print out top 20 search results
+                printTweets(names, tweets, wing, likes, followers);
             }
             else{
                 cout << "You are doing BFS by Date!" << endl;
-                cout << "Enter the date you want to search by:" << endl;
+                cout << "Enter the date you want to search by in mmddyyyy format:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
+
+                //Perform BFS search
+                vector<string> tweets, names, wing;
+                vector<int> likes, followers; 
+                BreadthFirstDate(search, root, names, tweets, wing, likes, followers);
+                
+                //Print out top 20 search results
+                printTweets(names, tweets, wing, likes, followers);
             }
             break;
         //Search by Wing
@@ -479,12 +531,28 @@ int main()
                 cout << "Enter the wing you want to search by:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<< endl << endl;
+
+                //Perform DFS search
+                vector<Node*> specifiedWings;
+                WingDFS(specifiedWings, root, search);
+
+                //Print out top 20 search results
+                cout << specifiedWings.size() << endl;
+                printTweets(specifiedWings);
             }
             else{
                 cout << "You are doing BFS by Wing!" << endl;
                 cout << "Enter the wing you want to search by:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '" << endl <<endl;
+
+                //Perform BFS search
+                vector<Node*> specifiedWings;
+                WingDFS(specifiedWings, root, search);
+
+                //Print out top 20 search results
+                cout << specifiedWings.size() << endl;
+                printTweets(specifiedWings);
             }
             break;
         case 4:
