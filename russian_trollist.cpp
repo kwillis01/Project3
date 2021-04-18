@@ -429,10 +429,8 @@ int main()
     string file = "russian-troll-tweets-master/IRAhandle_tweets_2.csv";
     GetData(file, nodes);
 	Node* root = BinaryInsert(nodes, 0, nodes.size() - 1);
-
     bool exit = false;
     cout << "Welcome to the Russian Troll Factory!" << endl;
-
     while(!exit){
         //Starting Menu
         cout << "Please make a selection: " << endl;
@@ -440,47 +438,48 @@ int main()
         cout << "2. Search by Date" << endl;
         cout << "3. Search by Wing" << endl;
         cout << "4. Exit" << endl;
-
         int input;
         int choice;
         string search;
         cin >> input;
         switch (input) {
-
         //Search by phrase
         case 1:
             cout << "How would you like to search?" << endl;
             cout << "1. Depth Search" << endl;
             cout << "2. Breadth Search" << endl;
             cin >> choice;
-
             if (choice == 1){
                 cout << "You are doing DFS by phrase!" << endl;
                 cout << "Enter the phrase you want to search for:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
-
                 //perform DFS search
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
+                auto start = high_resolution_clock::now();
                 DepthFirstPhrase(search, root, tweets, names, wing, likes, followers);
-
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<nanoseconds>(stop-start);
                 //Print out top 20 search results
                 printTweets(names, tweets, wing, likes, followers);
+                cout << "Time taken for DFS by phrase: " << duration.count() << " nanoseconds" << endl;
             }
             else{
                 cout << "You are doing BFS by phrase!" << endl;
                 cout << "Enter the phrase you want to search for:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
-
                 //perform BFS search
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
+                auto start = high_resolution_clock::now();
                 BreadthFirstPhrase(search, root, tweets, names, wing, likes, followers);
-
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<nanoseconds>(stop-start);
                 //Print out top 20 search results
                 printTweets(names, tweets, wing, likes, followers);
+                cout << "Time taken for BFS by phrase: " << duration.count() << " nanoseconds" << endl;
             }
             break;
         //Search by Date
@@ -489,34 +488,37 @@ int main()
             cout << "1. Depth Search" << endl;
             cout << "2. Breadth Search" << endl;
             cin >> choice;
-
             if (choice == 1){
                 cout << "You are doing DFS by Date!" << endl;
                 cout << "Enter the date you want to search by in mmddyyyy format:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
-
                 //Perform DFS search
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
+                auto start = high_resolution_clock::now();
                 DepthFirstDate(search, root, names, tweets, wing, likes, followers);
-
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<nanoseconds>(stop-start);
                 //Print out top 20 search results
                 printTweets(names, tweets, wing, likes, followers);
+                cout << "Time taken for DFS by date: " << duration.count() << " nanoseconds" << endl;
             }
             else{
                 cout << "You are doing BFS by Date!" << endl;
                 cout << "Enter the date you want to search by in mmddyyyy format:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
-
                 //Perform BFS search
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
+                auto start = high_resolution_clock::now();
                 BreadthFirstDate(search, root, names, tweets, wing, likes, followers);
-                
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<nanoseconds>(stop-start);
                 //Print out top 20 search results
                 printTweets(names, tweets, wing, likes, followers);
+                cout << "Time taken for BFS by date: " << duration.count() << " nanoseconds" << endl;
             }
             break;
         //Search by Wing
@@ -525,34 +527,37 @@ int main()
             cout << "1. Depth Search" << endl;
             cout << "2. Breadth Search" << endl;
             cin >> choice;
-
             if (choice == 1){
                 cout << "You are doing DFS by Wing!" << endl;
                 cout << "Enter the wing you want to search by:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '"<< endl << endl;
-
                 //Perform DFS search
                 vector<Node*> specifiedWings;
+                auto start = high_resolution_clock::now();
                 WingDFS(specifiedWings, root, search);
-
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<nanoseconds>(stop-start);
                 //Print out top 20 search results
                 cout << specifiedWings.size() << endl;
                 printTweets(specifiedWings);
+                cout << "Time taken for DFS by wing: " << duration.count() << " nanoseconds" << endl;
             }
             else{
                 cout << "You are doing BFS by Wing!" << endl;
                 cout << "Enter the wing you want to search by:" << endl;
                 cin >> search;
                 cout << "You are searching for ' " << search << " '" << endl <<endl;
-
                 //Perform BFS search
                 vector<Node*> specifiedWings;
-                WingDFS(specifiedWings, root, search);
-
+                auto start = high_resolution_clock::now();
+                WingBFS(specifiedWings, root, search);
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<nanoseconds>(stop-start);
                 //Print out top 20 search results
                 cout << specifiedWings.size() << endl;
                 printTweets(specifiedWings);
+                cout << "Time taken for BFS by wing: " << duration.count() << " nanoseconds" << endl;
             }
             break;
         case 4:
