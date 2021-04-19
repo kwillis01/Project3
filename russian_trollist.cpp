@@ -322,7 +322,7 @@ void BreadthFirstDate(string date, Node* root, vector<string> &names, vector<str
                 q.push(node->right);
             }
             q.pop();
-            for (int i = 0; i < root->dates.size(); i++){
+            for (int i = 0; i < node->dates.size(); i++){
                 //cout << "checkpoint" << endl;
                 if (node->dates[i] == date){
                     
@@ -461,9 +461,9 @@ int main()
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
 
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 DepthFirstPhrase(search, root, tweets, names, wing, likes, followers);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
@@ -481,9 +481,9 @@ int main()
                 //perform BFS search and time it
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 BreadthFirstPhrase(search, root, tweets, names, wing, likes, followers);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
@@ -508,9 +508,9 @@ int main()
                 //Perform DFS search and time it
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 DepthFirstDate(search, root, names, tweets, wing, likes, followers);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
@@ -528,9 +528,9 @@ int main()
                 //Perform BFS search and time it
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 BreadthFirstDate(search, root, names, tweets, wing, likes, followers);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
@@ -554,9 +554,9 @@ int main()
 
                 //Perform DFS searchand time it
                 vector<Node*> specifiedWings;
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 WingDFS(specifiedWings, root, search);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
@@ -573,9 +573,9 @@ int main()
 
                 //Perform BFS search and time it
                 vector<Node*> specifiedWings;
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 WingBFS(specifiedWings, root, search);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
