@@ -139,45 +139,48 @@ void printTweets(vector<string> &names, vector<string> &tweets, vector<string> &
             }
             prevIndices.insert(index);
 
-            cout << "Author: @" << names[i] << endl;
-            cout << "Tweet: ' " << tweets[i] << " '"<< endl;
-            cout << "Number of Likes: " << likes[i] << endl;
-            cout << "Followers: " << followers[i] << endl;
-            cout << "Wing: " << wing[i] << endl << endl;
+            cout << "Author: @" << names[index] << endl;
+            cout << "Tweet: ' " << tweets[index] << " '"<< endl;
+            cout << "Number of Likes: " << likes[index] << endl;
+            cout << "Followers: " << followers[index] << endl;
+            cout << "Wing: " << wing[index] << endl << endl;
         }
     }
 }
 void printTweets(vector<Node*> &nodes){
+    set<int> prevIndices;
+    int index = 0;
+
     if(nodes.size() > 5){
         for(int i= 0; i < 5; i++){
-            index = rand() % names.size();
+            index = rand() % nodes.size();
             while (prevIndices.count(index) > 0)
             {
-                index = rand() % names.size();
+                index = rand() % nodes.size();
             }
             prevIndices.insert(index);
 
-            cout << "Author: @" << nodes[i]->name << endl;
-            cout << "Tweet: ' " << nodes[i]->tweets[0] << " '"<< endl;
-            cout << "Number of Likes: " << nodes[i]->likes[0] << endl;
-            cout << "Followers: " << nodes[i]->followers[0] << endl;
-            cout << "Wing: " << nodes[i]->wing << endl << endl;
+            cout << "Author: @" << nodes[index]->name << endl;
+            cout << "Tweet: ' " << nodes[index]->tweets[0] << " '"<< endl;
+            cout << "Number of Likes: " << nodes[index]->likes[0] << endl;
+            cout << "Followers: " << nodes[index]->followers[0] << endl;
+            cout << "Wing: " << nodes[index]->wing << endl << endl;
         }
     }
     else{
         for(int i = 0; i < nodes.size(); i++){
-            index = rand() % names.size();
+            index = rand() % nodes.size();
             while (prevIndices.count(index) > 0)
             {
-                index = rand() % names.size();
+                index = rand() % nodes.size();
             }
             prevIndices.insert(index);
 
-            cout << "Author: @" << nodes[i]->name << endl;
-            cout << "Tweet: ' " << nodes[i]->tweets[0] << " '"<< endl;
-            cout << "Number of Likes: " << nodes[i]->likes[0] << endl;
-            cout << "Followers: " << nodes[i]->followers[0] << endl;
-            cout << "Wing: " << nodes[i]->wing << endl << endl;
+            cout << "Author: @" << nodes[index]->name << endl;
+            cout << "Tweet: ' " << nodes[index]->tweets[0] << " '"<< endl;
+            cout << "Number of Likes: " << nodes[index]->likes[0] << endl;
+            cout << "Followers: " << nodes[index]->followers[0] << endl;
+            cout << "Wing: " << nodes[index]->wing << endl << endl;
         }
     }
 }
@@ -298,12 +301,7 @@ void GetData(string fileName, vector<Node*>& nodes)
 				Node* node = new Node(name, tweet, likes, followers, dates, wing);
 				nodes.push_back(node);
 			}
-
-			//commented out part is for debugging
-			//cout << row << " " << name << " " << tweet << " " << dates << " " << likes << " " << followers << endl;
-			//row++;
 		}
-		//cout << nodes.size();
 	}
 	else
 	{
@@ -425,7 +423,6 @@ void WingDFS(vector<Node*>& wings, Node* root, string specifiedWing)
 		WingDFS(wings, root->left, specifiedWing);
 		WingDFS(wings, root->right, specifiedWing);
 	}
-	
 }
 
 //Breadth First Search by Wing
@@ -484,7 +481,7 @@ int main()
             if (choice == 1){
                 cout << "You are doing DFS by phrase!" << endl;
                 cout << "Enter the phrase you want to search for:" << endl;
-                cin >> search;
+                getline(cin, search);
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
 
                 //perform DFS search and time it
@@ -505,7 +502,7 @@ int main()
             else{
                 cout << "You are doing BFS by phrase!" << endl;
                 cout << "Enter the phrase you want to search for:" << endl;
-                cin >> search;
+                getline(cin, search);
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
 
                 //perform BFS search and time it
@@ -532,7 +529,7 @@ int main()
             if (choice == 1){
                 cout << "You are doing DFS by Date!" << endl;
                 cout << "Enter the date you want to search by in mmddyyyy format:" << endl;
-                cin >> search;
+                getline(cin, search);
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
 
                 //Perform DFS search and time it
@@ -552,7 +549,7 @@ int main()
             else{
                 cout << "You are doing BFS by Date!" << endl;
                 cout << "Enter the date you want to search by in mmddyyyy format:" << endl;
-                cin >> search;
+                getline(cin, search);
                 cout << "You are searching for ' " << search << " '"<<endl << endl;
 
                 //Perform BFS search and time it
@@ -579,7 +576,7 @@ int main()
             if (choice == 1){
                 cout << "You are doing DFS by Wing!" << endl;
                 cout << "Enter the wing you want to search by:" << endl;
-                cin >> search;
+                getline(cin, search);
                 cout << "You are searching for ' " << search << " '"<< endl << endl;
 
                 //Perform DFS searchand time it
@@ -598,7 +595,7 @@ int main()
             else{
                 cout << "You are doing BFS by Wing!" << endl;
                 cout << "Enter the wing you want to search by:" << endl;
-                cin >> search;
+                getline(cin, search);
                 cout << "You are searching for ' " << search << " '" << endl <<endl;
 
                 //Perform BFS search and time it
