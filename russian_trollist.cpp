@@ -323,14 +323,12 @@ void BreadthFirstDate(string date, Node* root, vector<string> &names, vector<str
             }
             q.pop();
             for (int i = 0; i < node->dates.size(); i++){
-                //cout << "checkpoint" << endl;
                 if (node->dates[i] == date){
-                    
-                    names.push_back(root->name);
-                    tweets.push_back(root->tweets[i]);
-                    wing.push_back(root->wing);
-                    likes.push_back(root->likes[i]);
-                    followers.push_back(root->followers[i]);
+                    names.push_back(node->name);
+                    tweets.push_back(node->tweets[i]);
+                    wing.push_back(node->wing);
+                    likes.push_back(node->likes[i]);
+                    followers.push_back(node->followers[i]);
                 }
             }
         }
