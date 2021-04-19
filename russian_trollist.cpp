@@ -467,17 +467,21 @@ int main()
         cout << "2. Search by Date" << endl;
         cout << "3. Search by Wing" << endl;
         cout << "4. Exit" << endl;
+        string inputStr;
         int input;
+        string choiceStr;
         int choice;
         string search;
-        cin >> input;
+        getline(cin, inputStr);
+        input = stoi(inputStr);
         switch (input) {
         //Search by phrase
         case 1:
             cout << "How would you like to search?" << endl;
             cout << "1. Depth Search" << endl;
             cout << "2. Breadth Search" << endl;
-            cin >> choice;
+            getline(cin, choiceStr);
+            choice = stoi(choiceStr);
             if (choice == 1){
                 cout << "You are doing DFS by phrase!" << endl;
                 cout << "Enter the phrase you want to search for:" << endl;
@@ -525,7 +529,8 @@ int main()
             cout << "How would you like to search?" << endl;
             cout << "1. Depth Search" << endl;
             cout << "2. Breadth Search" << endl;
-            cin >> choice;
+            getline(cin, choiceStr);
+            choice = stoi(choiceStr);
             if (choice == 1){
                 cout << "You are doing DFS by Date!" << endl;
                 cout << "Enter the date you want to search by in mmddyyyy format:" << endl;
@@ -572,7 +577,8 @@ int main()
             cout << "How would you like to search?" << endl;
             cout << "1. Depth Search" << endl;
             cout << "2. Breadth Search" << endl;
-            cin >> choice;
+            getline(cin, choiceStr);
+            choice = stoi(choiceStr);
             if (choice == 1){
                 cout << "You are doing DFS by Wing!" << endl;
                 cout << "Enter the wing you want to search by:" << endl;
