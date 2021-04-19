@@ -7,6 +7,7 @@
 #include <fstream>
 #include <stack>
 #include <chrono>
+#include <set>
 using namespace std;
 using namespace std::chrono;
 
@@ -110,17 +111,34 @@ bool isSubstring(string str, string substr){
 //prints the data contained in the top 20 nodes
 void printTweets(vector<string> &names, vector<string> &tweets, vector<string> &wing, vector<int> &likes, vector<int> &followers)
 {
+    set<int> prevIndices;
+    int index = 0;
+
     if(names.size() > 5){
         for(int i= 0; i < 5; i++){
-            cout << "Author: @" << names[i] << endl;
-            cout << "Tweet: ' " << tweets[i] << " '"<< endl;
-            cout << "Number of Likes: " << likes[i] << endl;
-            cout << "Followers: " << followers[i] << endl;
-            cout << "Wing: " << wing[i] << endl << endl;
+            index = rand() % names.size();
+            while (prevIndices.count(index) > 0)
+            {
+                index = rand() % names.size();
+            }
+            prevIndices.insert(index);
+
+            cout << "Author: @" << names[index] << endl;
+            cout << "Tweet: ' " << tweets[index] << " '"<< endl;
+            cout << "Number of Likes: " << likes[index] << endl;
+            cout << "Followers: " << followers[index] << endl;
+            cout << "Wing: " << wing[index] << endl << endl;
         }
     }
     else{
         for(int i = 0; i < names.size(); i++){
+            index = rand() % names.size();
+            while (prevIndices.count(index) > 0)
+            {
+                index = rand() % names.size();
+            }
+            prevIndices.insert(index);
+
             cout << "Author: @" << names[i] << endl;
             cout << "Tweet: ' " << tweets[i] << " '"<< endl;
             cout << "Number of Likes: " << likes[i] << endl;
@@ -132,6 +150,13 @@ void printTweets(vector<string> &names, vector<string> &tweets, vector<string> &
 void printTweets(vector<Node*> &nodes){
     if(nodes.size() > 5){
         for(int i= 0; i < 5; i++){
+            index = rand() % names.size();
+            while (prevIndices.count(index) > 0)
+            {
+                index = rand() % names.size();
+            }
+            prevIndices.insert(index);
+
             cout << "Author: @" << nodes[i]->name << endl;
             cout << "Tweet: ' " << nodes[i]->tweets[0] << " '"<< endl;
             cout << "Number of Likes: " << nodes[i]->likes[0] << endl;
@@ -141,6 +166,13 @@ void printTweets(vector<Node*> &nodes){
     }
     else{
         for(int i = 0; i < nodes.size(); i++){
+            index = rand() % names.size();
+            while (prevIndices.count(index) > 0)
+            {
+                index = rand() % names.size();
+            }
+            prevIndices.insert(index);
+
             cout << "Author: @" << nodes[i]->name << endl;
             cout << "Tweet: ' " << nodes[i]->tweets[0] << " '"<< endl;
             cout << "Number of Likes: " << nodes[i]->likes[0] << endl;
@@ -322,15 +354,13 @@ void BreadthFirstDate(string date, Node* root, vector<string> &names, vector<str
                 q.push(node->right);
             }
             q.pop();
-            for (int i = 0; i < root->dates.size(); i++){
-                //cout << "checkpoint" << endl;
+            for (int i = 0; i < node->dates.size(); i++){
                 if (node->dates[i] == date){
-                    
-                    names.push_back(root->name);
-                    tweets.push_back(root->tweets[i]);
-                    wing.push_back(root->wing);
-                    likes.push_back(root->likes[i]);
-                    followers.push_back(root->followers[i]);
+                    names.push_back(node->name);
+                    tweets.push_back(node->tweets[i]);
+                    wing.push_back(node->wing);
+                    likes.push_back(node->likes[i]);
+                    followers.push_back(node->followers[i]);
                 }
             }
         }
@@ -461,9 +491,9 @@ int main()
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
 
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 DepthFirstPhrase(search, root, tweets, names, wing, likes, followers);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
@@ -481,9 +511,9 @@ int main()
                 //perform BFS search and time it
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 BreadthFirstPhrase(search, root, tweets, names, wing, likes, followers);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
@@ -508,9 +538,9 @@ int main()
                 //Perform DFS search and time it
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 DepthFirstDate(search, root, names, tweets, wing, likes, followers);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
@@ -528,9 +558,9 @@ int main()
                 //Perform BFS search and time it
                 vector<string> tweets, names, wing;
                 vector<int> likes, followers; 
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 BreadthFirstDate(search, root, names, tweets, wing, likes, followers);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
@@ -554,9 +584,9 @@ int main()
 
                 //Perform DFS searchand time it
                 vector<Node*> specifiedWings;
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 WingDFS(specifiedWings, root, search);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
@@ -573,9 +603,9 @@ int main()
 
                 //Perform BFS search and time it
                 vector<Node*> specifiedWings;
-                auto start = high_resolution_clock::now();
+                steady_clock::time_point start = steady_clock::now();
                 WingBFS(specifiedWings, root, search);
-                auto stop = high_resolution_clock::now();
+                steady_clock::time_point stop = steady_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop-start);
 
                 //Print out top 5 search results
